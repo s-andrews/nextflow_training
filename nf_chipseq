@@ -24,8 +24,6 @@ include { makeFilesChannel; getFileBaseNames } from './nf_modules/files.mod.nf'
 include { getGenome }                          from './nf_modules/genomes.mod.nf'
 include { listGenomes }                        from './nf_modules/genomes.mod.nf'
 
-genome = getGenome(params.genome)
-
 include { FASTQC }            from './nf_modules/fastqc.mod.nf'
 include { FASTQC as FASTQC2 } from './nf_modules/fastqc.mod.nf'
 include { FASTQ_SCREEN }      from './nf_modules/fastq_screen.mod.nf'
@@ -63,6 +61,9 @@ workflow {
 
 
         def file_ch = makeFilesChannel(args)
+
+        def genome = getGenome(params.genome)
+
 
 
         FASTQC          (file_ch)
