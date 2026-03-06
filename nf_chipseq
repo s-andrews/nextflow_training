@@ -58,7 +58,7 @@ workflow {
         def file_ch = makeFilesChannel(args)
 
         // Convert the genome name into a dict of genome values
-        params.genome = getGenome(params.genome)
+        params.genome_values = getGenome(params.genome)
 
 
         FASTQC          (file_ch)

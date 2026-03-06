@@ -9,7 +9,7 @@ process BOWTIE2 {
 	label 'multiCore'
 
     publishDir "${params.outdir}",
-        mode: "link", overwrite: true, enabled: !params.no_output
+        mode: "link", overwrite: true, enabled: true
 
     input:
 	    tuple val(name), path(reads)
@@ -45,7 +45,7 @@ process BOWTIE2 {
 		}
 
 
-		def index = params.genome["bowtie2"]
+		def index = params.genome_values["bowtie2"]
 		def bowtie_name = name + "_" + params.genome["name"]
 
 		"""

@@ -9,7 +9,7 @@ process MULTIQC {
 	maxRetries 3
 
     publishDir "${params.outdir}",
-        mode: "link", overwrite: true, enabled: !params.no_output
+        mode: "link", overwrite: true, enabled: true
 
     input:
 	    path (file)
