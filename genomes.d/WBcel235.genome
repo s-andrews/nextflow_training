@@ -1,0 +1,8 @@
+name	WBcel235
+species	C_elegans
+fasta	/opt/nextflow_training/genomes/WBcel235/
+bismark	/opt/nextflow_training/genomes/WBcel235/
+bowtie2	/opt/nextflow_training/genomes/WBcel235/Caenorhabditis_elegans.WBcel235
+hisat2	/opt/nextflow_training/genomes/WBcel235/Caenorhabditis_elegans.WBcel235
+gtf	/opt/nextflow_training/genomes/WBcel235/Caenorhabditis_elegans.WBcel235.75.gtf
+hisat2_splices	/opt/nextflow_training/genomes/WBcel235/Caenorhabditis_elegans.WBcel235.75.hisat2_splices.txt

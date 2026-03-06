@@ -1,0 +1,8 @@
+name	R64-1-1
+species	S_cerevisiae
+fasta	/opt/nextflow_training/genomes/R64-1-1/
+bismark	/opt/nextflow_training/genomes/R64-1-1/
+bowtie2	/opt/nextflow_training/genomes/R64-1-1/Saccharomyces_cerevisiae.R64-1-1
+hisat2	/opt/nextflow_training/genomes/R64-1-1/Saccharomyces_cerevisiae.R64-1-1
+gtf	/opt/nextflow_training/genomes/R64-1-1/Saccharomyces_cerevisiae.R64-1-1.91.gtf
+hisat2_splices	/opt/nextflow_training/genomes/R64-1-1/Saccharomyces_cerevisiae.R64-1-1.91.hisat2_splices.txt
