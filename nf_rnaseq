@@ -18,9 +18,6 @@ include { makeFilesChannel; getFileBaseNames } from './nf_modules/files.mod.nf'
 include { getGenome }    from './nf_modules/genomes.mod.nf'
 include { listGenomes }  from './nf_modules/genomes.mod.nf'
 
-
-genome = getGenome(params.genome)
-
 include { FASTQC }       from './nf_modules/fastqc.mod.nf'
 include { FASTQC as FASTQC2 } from './nf_modules/fastqc.mod.nf'
 include { TRIM_GALORE }  from'./nf_modules/trim_galore.mod.nf'
