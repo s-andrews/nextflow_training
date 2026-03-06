@@ -25,7 +25,7 @@ def getGenome(name) {
         def sections =  it.split("\\s+",2)
         genomeValues[sections[0]] = sections[1]
     }
-g
+
     return genomeValues
 
 }
