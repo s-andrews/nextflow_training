@@ -36,6 +36,8 @@ process TRIM_GALORE {
 		if (params.verbose){
 			println ("[MODULE] TRIM GALORE ARGS: " + params.trim_galore_args)
 		}
+
+		def trim_galore_args = params.trim_galore_args
 		
 		def pairedString = ""
 		if (params.single_end){
@@ -48,21 +50,21 @@ process TRIM_GALORE {
 		}
 
         // Set multi-core
-		params.trim_galore_args += " -j 2 "
+		trim_galore_args += " -j 2 "
 
 		if (params.rrbs){
-			params.trim_galore_args = params.trim_galore_args + " --rrbs "
+			trim_galore_args += " --rrbs "
 		}
 			
 		if  (params.pbat){
-			params.trim_galore_args = params.trim_galore_args + " --clip_r1 ${params.pbat} "
+			trim_galore_args += " --clip_r1 ${params.pbat} "
 			if (pairedString == "--paired"){
-				params.trim_galore_args = params.trim_galore_args + " --clip_r2 ${params.pbat} "
+				trim_galore_args += " --clip_r2 ${params.pbat} "
 			}
 		}
 
 		"""
-		trim_galore ${params.trim_galore_args} ${pairedString} ${reads}
+		trim_galore ${trim_galore_args} ${pairedString} ${reads}
 		"""
 
 }
