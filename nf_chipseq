@@ -60,6 +60,7 @@ workflow {
         // Convert the genome name into a dict of genome values
         params.genome_values = getGenome(params.genome)
 
+        println(params.genome_values)
 
         FASTQC          (file_ch)
         TRIM_GALORE     (file_ch)
