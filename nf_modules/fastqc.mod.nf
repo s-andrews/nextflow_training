@@ -21,11 +21,11 @@ process FASTQC {
             fastqc_args += " --nogroup "
         }
 
-        if (verbose){
-            println ("[MODULE] FASTQC ARGS: "+ fastqc_args)
+        if (params.verbose){
+            println ("[MODULE] FASTQC ARGS: "+ params.fastqc_args)
         }
 
         """
-        fastqc ${fastqc_args} -q -t 2 ${reads}
+        fastqc ${params.fastqc_args} -q -t 2 ${reads}
         """
 }
