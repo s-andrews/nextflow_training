@@ -20,11 +20,11 @@ process MULTIQC {
 	script:
 
 		
-		if (verbose){
+		if (params.verbose){
 			println ("[MODULE] MULTIQC ARGS: " + params.multiqc_args)
 		}
 	
 		"""
-		multiqc $multiqc_args -x work --filename ${params.prefix}multiqc_report.html .
+		multiqc ${params.multiqc_args} -x work --filename ${params.prefix}multiqc_report.html .
 		"""
 }

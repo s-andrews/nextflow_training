@@ -3,7 +3,7 @@ def getGenome(name) {
 
     // Find a file with the same name as the genome in our genomes.d directory
 
-    scriptDir = workflow.projectDir
+    def scriptDir = workflow.projectDir
     
     // die gracefully if the user specified an incorrect genome
     def fileName = scriptDir.toString() + "/genomes.d/" + name + ".genome"
@@ -18,7 +18,7 @@ def getGenome(name) {
     def genomeValues = [:]  // initialising map. name is also part of each .genome file
 
     genomeFH.eachLine {
-        sections =  it.split("\\s+",2)
+        def sections =  it.split("\\s+",2)
         genomeValues[sections[0]] = sections[1]
     }
 
