@@ -1,4 +1,3 @@
-nextflow.enable.dsl=2
 
 // parameters passed in by specialised pipelines
 params.singlecell = ''

@@ -1,4 +1,3 @@
-nextflow.enable.dsl=2
 
 // let's use an empty default prefix which can be set for each of the pipelines invoking MultiQC
 // using --prefix, e.g. "--prefix lane8075_L001_" so that we can copy files using 'copy_back_files'. 

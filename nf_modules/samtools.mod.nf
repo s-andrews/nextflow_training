@@ -1,4 +1,3 @@
-nextflow.enable.dsl=2
 params.no_output = false
 
 process SAMTOOLS_SORT{	

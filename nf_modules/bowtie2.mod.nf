@@ -1,4 +1,3 @@
-nextflow.enable.dsl=2
 params.local = ''
 params.no_output = false
 

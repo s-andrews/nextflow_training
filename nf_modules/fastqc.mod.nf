@@ -1,4 +1,3 @@
-nextflow.enable.dsl=2
 params.nogroup = false
 params.no_output = false
 
