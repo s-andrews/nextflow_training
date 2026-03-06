@@ -7,30 +7,28 @@ process BOWTIE2 {
 
 	label 'bigMem'
 	label 'multiCore'
-		
+
+    publishDir "${params.outdir}",
+        mode: "link", overwrite: true, enabled: !params.no_output
+
     input:
 	    tuple val(name), path(reads)
-		val (outputdir)
-		val (bowtie2_args)
-		val (verbose)
 
 	output:
 	    tuple val(name), path ("*bam"),        emit: bam
 		path "*stats.txt", emit: stats 
 
-	publishDir "$outputdir",
-		mode: "link", overwrite: true, enabled: !params.no_output
 
 	script:
-		if (verbose){
-			println ("[MODULE] BOWTIE2 ARGS: " + bowtie2_args)
+		if (params.verbose){
+			println ("[MODULE] BOWTIE2 ARGS: " + params.bowtie2_args)
 		}
 
 		cores = 2
-		readString = ""
+		def readString = ""
 
 		// Options we add are
-		bowtie_options = bowtie2_args
+		def bowtie_options = params.bowtie2_args
 		bowtie_options +=  " --no-unal " // We don't need unaligned reads in the BAM file
 		
 		if (params.local == '--local'){
@@ -47,8 +45,8 @@ process BOWTIE2 {
 		}
 
 
-		index = params.genome["bowtie2"]
-		bowtie_name = name + "_" + params.genome["name"]
+		def index = params.genome["bowtie2"]
+		def bowtie_name = name + "_" + params.genome["name"]
 
 		"""
 		bowtie2 -x ${index} -p ${cores} ${bowtie_options} ${readString}  2>${bowtie_name}_bowtie2_stats.txt | samtools view -bS -F 4 -F 8 -F 256 -> ${bowtie_name}_bowtie2.bam

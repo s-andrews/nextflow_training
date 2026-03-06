@@ -21,26 +21,23 @@ process TRIM_GALORE {
 	errorStrategy { sleep(Math.pow(2, task.attempt) * 30 as long); return 'retry' }
 	maxRetries 2
     
+    publishDir "${params.outdir}",
+        mode: "link", overwrite: true, enabled: !params.no_output
+
 	input:
 	    tuple val (name), path (reads)
-		val (outputdir)
-		val (trim_galore_args)
-		val (verbose)
 
 	output:
 	    tuple val(name), path ("*fq.gz"), emit: reads
 		path "*trimming_report.txt", optional: true, emit: report
 		
-	publishDir "$outputdir",
-		mode: "link", overwrite: true, enabled: !params.no_output
-
 
     script:
-		if (verbose){
-			println ("[MODULE] TRIM GALORE ARGS: " + trim_galore_args)
+		if (params.verbose){
+			println ("[MODULE] TRIM GALORE ARGS: " + params.trim_galore_args)
 		}
 		
-		pairedString = ""
+		def pairedString = ""
 		if (params.single_end){
 			// paired-end mode may be overridden, see e.g. TrAEL-seq Indexing
 		}
@@ -50,40 +47,22 @@ process TRIM_GALORE {
 			}
 		}
 
-                // Set multi-core
-		trim_galore_args += " -j 8 "
+        // Set multi-core
+		params.trim_galore_args += " -j 2 "
 
-		// Specialised Epigenetic Clock Processing		
-		if (params.clock){
-			trim_galore_args += " --breitling "	
+		if (params.rrbs){
+			params.trim_galore_args = params.trim_galore_args + " --rrbs "
 		}
-		else{
-			if (params.singlecell){
-				trim_galore_args += " --clip_r1 6 "
-				if (pairedString == "--paired"){
-					trim_galore_args += " --clip_r2 6 "
-				}
-			}
-
-			if (params.rrbs){
-				trim_galore_args = trim_galore_args + " --rrbs "
-			}
 			
-			if  (params.pbat){
-				trim_galore_args = trim_galore_args + " --clip_r1 $params.pbat "
-				if (pairedString == "--paired"){
-					trim_galore_args = trim_galore_args + " --clip_r2 $params.pbat "
-				}
-			}
-
-			// Second step of Clock processing:
-			if (params.three_prime_clip_R1 && params.three_prime_clip_R2){
-				trim_galore_args +=	" --three_prime_clip_R1 ${params.three_prime_clip_R1} --three_prime_clip_R2 ${params.three_prime_clip_R2} "
+		if  (params.pbat){
+			params.trim_galore_args = params.trim_galore_args + " --clip_r1 ${params.pbat} "
+			if (pairedString == "--paired"){
+				params.trim_galore_args = params.trim_galore_args + " --clip_r2 ${params.pbat} "
 			}
 		}
 
 		"""
-		trim_galore $trim_galore_args ${pairedString} ${reads}
+		trim_galore ${params.trim_galore_args} ${pairedString} ${reads}
 		"""
 
 }
