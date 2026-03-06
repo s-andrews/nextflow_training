@@ -15,20 +15,20 @@ include { FASTQC }                             from './nf_modules/fastqc.mod.nf'
 
 workflow {
 
-    if (params.verbose){
-      println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
-    }
-
-    params.help = false
-    // Show help message and exit
-    if (params.help){
-      helpMessage()
-      exit 0
-    }
-
-    file_ch = makeFilesChannel(args) 
-
     main:
+        if (params.verbose){
+          println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
+        }
+
+        params.help = false
+        // Show help message and exit
+        if (params.help){
+          helpMessage()
+          exit 0
+        }
+
+        file_ch = makeFilesChannel(args) 
+
         FASTQC(file_ch, params.outdir, params.fastqc_args, params.verbose)
        
 }
