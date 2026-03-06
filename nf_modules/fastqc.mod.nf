@@ -5,7 +5,7 @@ process FASTQC {
 
     tag "$name"
 
-    publishDir "$outputdir",
+    publishDir "${params.outdir}",
         mode: "link", overwrite: true, enabled: !params.no_output
 
     input:
@@ -29,6 +29,6 @@ process FASTQC {
         }
 
         """
-        fastqc $fastqc_args -q -t 2 ${reads}
+        fastqc ${fastqc_args} -q -t 2 ${reads}
         """
 }
