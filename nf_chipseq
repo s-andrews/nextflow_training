@@ -57,15 +57,13 @@ workflow {
 
         def file_ch = makeFilesChannel(args)
 
-        // Convert the genome name into a dict of genome values
-        params.genome_values = getGenome(params.genome)
-
-        println(params.genome_values)
+        // We parse the genome into an actual data structure
+        def genome = getGenome(params.genome)
 
         FASTQC          (file_ch)
         TRIM_GALORE     (file_ch)
         FASTQC2         (TRIM_GALORE.out.reads)
-        BOWTIE2         (TRIM_GALORE.out.reads)
+        BOWTIE2         (TRIM_GALORE.out.reads, genome)
      
         // merging channels for MultiQC
         multiqc_ch = FASTQC.out.report.mix(

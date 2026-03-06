@@ -13,6 +13,7 @@ process BOWTIE2 {
 
     input:
 	    tuple val(name), path(reads)
+		genome
 
 	output:
 	    tuple val(name), path ("*bam"),        emit: bam
@@ -45,7 +46,7 @@ process BOWTIE2 {
 		}
 
 
-		def index = params.genome_values["bowtie2"]
+		def index = genome["bowtie2"]
 		def bowtie_name = name + "_" + params.genome["name"]
 
 		"""
