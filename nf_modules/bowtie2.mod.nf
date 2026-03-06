@@ -49,8 +49,6 @@ process BOWTIE2 {
 		def index = genome["bowtie2"]
 		def bowtie_name = name + "_" + genome["name"]
 
-		println("Name=${name} Genome name=${genome['name']} bowtie_name=${bowtie_name}")
-
 		"""
 		bowtie2 -x ${index} -p ${cores} ${bowtie_options} ${readString}  2>${bowtie_name}_bowtie2_stats.txt | samtools view -bS -F 4 -F 8 -F 256 - > ${bowtie_name}_bowtie2.bam
 		"""
