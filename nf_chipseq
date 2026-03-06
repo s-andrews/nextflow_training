@@ -49,7 +49,6 @@ workflow {
 
         if (params.verbose){
             println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
-            println ("[WORKFLOW] FASTQ SCREEN ARGS ARE: " + params.fastq_screen_args)
             println ("[WORKFLOW] TRIM GALORE ARGS: "      + params.trim_galore_args)
             println ("[WORKFLOW] BOWTIE2 ARGS: "          + params.bowtie2_args)
             println ("[WORKFLOW] MULTIQC ARGS: "          + params.multiqc_args)
