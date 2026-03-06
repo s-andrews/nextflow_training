@@ -10,9 +10,6 @@ process FASTQC {
 
     input:
         tuple val(name), path(reads)
-        val(outputdir)
-        val(fastqc_args)
-        val(verbose)
 
     output:
         tuple val(name), path("*fastqc*"), emit: all
