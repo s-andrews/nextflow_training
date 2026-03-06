@@ -21,7 +21,7 @@ process HISAT2 {
 	
 		def hisat2_options = params.hisat2_args
 
-		if (verbose){
+		if (params.verbose){
 			println ("[MODULE] HISAT2 ARGS: " + hisat2_options)
 		}
 	

@@ -45,7 +45,6 @@ workflow {
 
         if (params.verbose){
             println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
-            println ("[WORKFLOW] FASTQ SCREEN ARGS ARE: " + params.fastq_screen_args)
             println ("[WORKFLOW] TRIM GALORE ARGS: "      + params.trim_galore_args)
             println ("[WORKFLOW] HISAT2 ARGS ARE: "       + params.hisat2_args)
             println ("[WORKFLOW] MULTIQC ARGS: "          + params.multiqc_args)
@@ -63,7 +62,6 @@ workflow {
         // merging channels for MultiQC
         multiqc_ch = FASTQC.out.report.mix(
             TRIM_GALORE.out.report,
-            FASTQ_SCREEN.out.report.ifEmpty([]),
             FASTQC2.out.report.ifEmpty([]),
             HISAT2.out.stats.ifEmpty([]),
         ).collect()
