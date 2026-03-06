@@ -9,23 +9,13 @@ def getGenome(name) {
     def fileName = scriptDir.toString() + "/genomes.d/" + name + ".genome"
     def testFile = new File(fileName)
     if (!testFile.exists()) {
-
-        // We'll try the users home genomes directory
-
-        scriptDir = new File(System.getProperty("user.home") + "/genomes.d/")
-
-        // die gracefully if the user specified an incorrect genome
-        fileName = scriptDir.toString() + "/" + name + ".genome"
-        testFile = new File(fileName)
-        if (!testFile.exists()) {
-            println("\nFile >>$fileName<< does not exist. Listing available genomes...\n")
-            listGenomes()
-        }
+        println("\nFile >>$fileName<< does not exist. Listing available genomes...\n")
+        listGenomes()
     }
 
-    genomeFH = new File (fileName).newInputStream()
+    def genomeFH = new File (fileName).newInputStream()
 
-    genomeValues = [:]  // initialising map. name is also part of each .genome file
+    def genomeValues = [:]  // initialising map. name is also part of each .genome file
 
     genomeFH.eachLine {
         sections =  it.split("\\s+",2)
@@ -44,46 +34,22 @@ def listGenomes(){
     // println (scriptDir) // last slash is consumed
     def allFiles = scriptDir.list()
     
-    for( file in allFiles.sort() ) {
-        
-        if( file =~ /.genome$/){
+    allFiles
+    .sort()
+    .findAll { it ==~ /.*\.genome$/ }
+    .each { file ->
 
-            def genomeFH = new File(scriptDir.toString() + "/$file").newInputStream()
-            def name = file.replaceFirst(/.genome/, "")
-        
-            println (name)
-            genomeFH.eachLine {
-                if (params.verbose){
-                    println ("\t$it")
-                }
+        def genomeFH = new File("${scriptDir}/${file}").newInputStream()
+        def name = file.replaceFirst(/\.genome$/, "")
+
+        println(name)
+
+        genomeFH.eachLine { line ->
+            if (params.verbose) {
+                println "\t${line}"
             }
         }
     }
-
-    // We'll repeat this for the genomes.d directory in the users home directory 
-    scriptDir = new File(System.getProperty("user.home") + "/genomes.d/")
-    // println (scriptDir) // last slash is consumed
-
-    if (scriptDir.exists()) {
-        allFiles = scriptDir.list()
-        
-        for( file in allFiles.sort() ) {
-            
-            if( file =~ /.genome$/){
-
-                def genomeFH = new File(scriptDir.toString() + "/$file").newInputStream()
-                def name = file.replaceFirst(/.genome/, "")
-            
-                println (name)
-                genomeFH.eachLine {
-                    if (params.verbose){
-                        println ("\t$it")
-                    }
-                }
-            }
-        }
-    }
- 
 
     println ("\nTo see this list of available genomes with more detailed information about paths and indexes,\nplease re-run the command including '--list_genomes --verbose'\n\n")
 
