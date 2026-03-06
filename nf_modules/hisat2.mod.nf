@@ -22,7 +22,7 @@ process HISAT2 {
 		def hisat_options = params.hisat2_args
 
 		if (params.verbose){
-			println ("[MODULE] HISAT2 ARGS: " + hisat2_options)
+			println ("[MODULE] HISAT2 ARGS: " + hisat_options)
 		}
 	
 		def cores = 2
