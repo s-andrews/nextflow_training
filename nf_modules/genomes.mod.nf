@@ -3,7 +3,7 @@ def getGenome(name) {
 
     // Find a file with the same name as the genome in our genomes.d directory
 
-    def scriptDir = workflow.scriptFile.canonicalFile.parent
+    def scriptDir = workflow.scriptFile.toRealPath().parent
     
     // die gracefully if the user specified an incorrect genome
     def fileName = scriptDir.toString() + "/genomes.d/" + name + ".genome"
