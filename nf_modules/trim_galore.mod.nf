@@ -1,4 +1,3 @@
-nextflow.enable.dsl=2
 
 params.singlecell = ''
 params.rrbs       = ''
