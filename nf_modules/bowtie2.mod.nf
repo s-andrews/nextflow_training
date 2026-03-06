@@ -11,9 +11,9 @@ process BOWTIE2 {
     publishDir "${params.outdir}",
         mode: "link", overwrite: true, enabled: true
 
-    take:
+    input:
 	    tuple val(name), path(reads)
-		genome
+		val genome
 
 	output:
 	    tuple val(name), path ("*bam"),        emit: bam
