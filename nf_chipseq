@@ -17,33 +17,13 @@ params.bowtie2_args = ''
 params.multiqc_args = ''
 
 params.help = false
-// Show help message and exit
-if (params.help){
-    helpMessage()
-    exit 0
-}
 
 params.list_genomes = false;
-if (params.list_genomes){
-    println ("[WORKLFOW] List genomes selected")
-}
-
-if (params.verbose){
-    println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
-    println ("[WORKFLOW] FASTQ SCREEN ARGS ARE: " + params.fastq_screen_args)
-    println ("[WORKFLOW] TRIM GALORE ARGS: "      + params.trim_galore_args)
-    println ("[WORKFLOW] BOWTIE2 ARGS: "          + params.bowtie2_args)
-    println ("[WORKFLOW] MULTIQC ARGS: "          + params.multiqc_args)
-}
-
 
 include { makeFilesChannel; getFileBaseNames } from './nf_modules/files.mod.nf'
 include { getGenome }                          from './nf_modules/genomes.mod.nf'
 include { listGenomes }                        from './nf_modules/genomes.mod.nf'
 
-if (params.list_genomes){
-    listGenomes()  // this lists all available genomes, and exits
-}
 genome = getGenome(params.genome)
 
 include { FASTQC }            from './nf_modules/fastqc.mod.nf'
@@ -57,6 +37,28 @@ include { MULTIQC }           from './nf_modules/multiqc.mod.nf'
 file_ch = makeFilesChannel(args)
 
 workflow {
+
+    // Show help message and exit
+    if (params.help){
+        helpMessage()
+        exit 0
+    }
+
+    if (params.list_genomes){
+        println ("[WORKLFOW] List genomes selected")
+    }
+
+    if (params.verbose){
+        println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
+        println ("[WORKFLOW] FASTQ SCREEN ARGS ARE: " + params.fastq_screen_args)
+        println ("[WORKFLOW] TRIM GALORE ARGS: "      + params.trim_galore_args)
+        println ("[WORKFLOW] BOWTIE2 ARGS: "          + params.bowtie2_args)
+        println ("[WORKFLOW] MULTIQC ARGS: "          + params.multiqc_args)
+    }
+
+    if (params.list_genomes){
+       listGenomes()  // this lists all available genomes, and exits
+    }
 
     main:
         FASTQC          (file_ch, params.outdir, params.fastqc_args, params.verbose)

@@ -1,8 +1,6 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-// last modified 12 Oct 2020
-
 params.outdir = "."
 params.fastqc_args = ''
 params.verbose = false
@@ -21,15 +19,14 @@ workflow {
       println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
     }
 
-
     params.help = false
     // Show help message and exit
     if (params.help){
       helpMessage()
       exit 0
+    }
 
     file_ch = makeFilesChannel(args) 
-
 
     main:
         FASTQC(file_ch, params.outdir, params.fastqc_args, params.verbose)
