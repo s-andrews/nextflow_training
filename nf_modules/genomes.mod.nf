@@ -40,16 +40,16 @@ def listGenomes(){
     
     println ("These genomes are currently available to choose from:")
     println ("=====================================================")
-    scriptDir = workflow.projectDir + "/genomes.d/"
+    def scriptDir = workflow.projectDir + "/genomes.d/"
     // println (scriptDir) // last slash is consumed
-    allFiles = scriptDir.list()
+    def allFiles = scriptDir.list()
     
-    for( def file : allFiles.sort() ) {
+    for( file in allFiles.sort() ) {
         
         if( file =~ /.genome$/){
 
-            genomeFH = new File(scriptDir.toString() + "/$file").newInputStream()
-            name = file.replaceFirst(/.genome/, "")
+            def genomeFH = new File(scriptDir.toString() + "/$file").newInputStream()
+            def name = file.replaceFirst(/.genome/, "")
         
             println (name)
             genomeFH.eachLine {
@@ -67,12 +67,12 @@ def listGenomes(){
     if (scriptDir.exists()) {
         allFiles = scriptDir.list()
         
-        for( def file : allFiles.sort() ) {
+        for( file in allFiles.sort() ) {
             
             if( file =~ /.genome$/){
 
-                genomeFH = new File(scriptDir.toString() + "/$file").newInputStream()
-                name = file.replaceFirst(/.genome/, "")
+                def genomeFH = new File(scriptDir.toString() + "/$file").newInputStream()
+                def name = file.replaceFirst(/.genome/, "")
             
                 println (name)
                 genomeFH.eachLine {
