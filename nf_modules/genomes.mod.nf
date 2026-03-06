@@ -8,6 +8,9 @@ def getGenome(name) {
     // die gracefully if the user specified an incorrect genome
     def fileName = scriptDir.toString() + "/genomes.d/" + name + ".genome"
     def testFile = new File(fileName)
+
+    println("Testing file called $fileName")
+
     if (!testFile.exists()) {
         println("\nFile >>$fileName<< does not exist. Listing available genomes...\n")
         listGenomes()
@@ -18,10 +21,11 @@ def getGenome(name) {
     def genomeValues = [:]  // initialising map. name is also part of each .genome file
 
     genomeFH.eachLine {
+        println("Reading line $it")
         def sections =  it.split("\\s+",2)
         genomeValues[sections[0]] = sections[1]
     }
-
+g
     return genomeValues
 
 }
