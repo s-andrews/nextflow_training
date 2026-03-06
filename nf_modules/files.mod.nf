@@ -2,16 +2,16 @@
 def makeFilesChannel(fileList) {    
     
     // def meta = [:]
-    file_ch = Channel.fromFilePairs( getFileBaseNames(fileList), size:-1)
+    def file_ch = Channel.fromFilePairs( getFileBaseNames(fileList), size:-1)
     return(file_ch)
 
 }
 
 def getFileBaseNames(fileList) {
 
-    baseNames = [:]
+    def baseNames = [:]
 
-    bareFiles = []
+    def bareFiles = []
 
     for (String s : fileList) {
        
@@ -72,7 +72,7 @@ def getFileBaseNames(fileList) {
 
     }
 
-    patterns = []
+    def patterns = []
     for (s in baseNames) {
         // println (s)
         pattern = s.key+"_{"+s.value.join(",")+"}.{fastq,fq}.gz"
