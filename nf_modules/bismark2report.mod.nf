@@ -1,7 +1,7 @@
 
 process BISMARK2REPORT {
 
-	publishDir "$outputdir",
+	publishDir "${params.outdir}",
 		mode: "link", overwrite: true
 
     input:
