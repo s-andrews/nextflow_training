@@ -16,7 +16,7 @@ process BISMARK {
 	// TODO: Fix memory requirements, probably with error handling...
 	//label 'hugeMem'
 
-	cpus { 5 }
+	cpus { 2 }
 	memory { 20.GB * task.attempt }  
 	errorStrategy { sleep(Math.pow(2, task.attempt) * 30 as long); return 'retry' }
 	maxRetries 3
