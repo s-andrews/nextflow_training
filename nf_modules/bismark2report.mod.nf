@@ -1,6 +1,9 @@
 
 process BISMARK2REPORT {
-	
+
+	publishDir "$outputdir",
+		mode: "link", overwrite: true
+
     input:
 	    file (file)
 		val (outputdir)
@@ -10,8 +13,6 @@ process BISMARK2REPORT {
 	output:
 	    path "*html",       emit: html
 		
-	publishDir "$outputdir",
-		mode: "link", overwrite: true
 
     script:
 		if (verbose){
