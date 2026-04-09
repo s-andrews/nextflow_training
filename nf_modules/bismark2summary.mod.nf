@@ -28,7 +28,6 @@ process BISMARK2SUMMARY {
 
 		if (params.prefix == ""){
 			"""
-			module load bismark
 			bismark2summary
 			"""
 		}
