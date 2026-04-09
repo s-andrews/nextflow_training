@@ -62,9 +62,9 @@ workflow {
         file_ch = makeFilesChannel(args)
         def genome = getGenome(params.genome)
 
-        FASTQC                         (file_ch, params.outdir, params.fastqc_args, params.verbose)
+        FASTQC                         (file_ch)
         TRIM_GALORE                    (file_ch, params.outdir, params.trim_galore_args, params.verbose)
-        FASTQC2                        (TRIM_GALORE.out.reads, params.outdir, params.fastqc_args, params.verbose)
+        FASTQC2                        (TRIM_GALORE.out.reads)
         BISMARK                        (TRIM_GALORE.out.reads, genome, params.outdir, params.bismark_args, params.verbose)
         // Skipping deduplication step
         BISMARK_METHYLATION_EXTRACTOR  (BISMARK.out.bam, params.outdir, params.bismark_methylation_extractor_args, params.verbose)
