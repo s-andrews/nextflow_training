@@ -11,7 +11,7 @@ process BISMARK_METHYLATION_EXTRACTOR {
 	
 	tag "$bam" // Adds name to job submission instead of (1), (2) etc.
 
-	publishDir "$outputdir",
+	publishDir "${params.outdir}",
 		mode: "link", overwrite: true
     
 
