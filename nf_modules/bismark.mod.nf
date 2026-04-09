@@ -10,6 +10,9 @@ process BISMARK {
 
 	tag "$name" // Adds name to job submission instead of (1), (2) etc.
 
+	publishDir "$outputdir",
+		mode: "link", overwrite: true
+
 	// TODO: Fix memory requirements, probably with error handling...
 	//label 'hugeMem'
 
@@ -36,8 +39,6 @@ process BISMARK {
 		tuple val(name), path ("*unmapped_reads_1.fq.gz"), optional: true, emit: unmapped1
 		tuple val(name), path ("*unmapped_reads_2.fq.gz"), optional: true, emit: unmapped2
 
-	publishDir "$outputdir",
-		mode: "link", overwrite: true
 
     script:
 		cores = 1
