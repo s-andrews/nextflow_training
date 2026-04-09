@@ -10,7 +10,7 @@ process BISMARK {
 
 	tag "$name" // Adds name to job submission instead of (1), (2) etc.
 
-	publishDir "$outputdir",
+	publishDir "${params.outdir}",
 		mode: "link", overwrite: true
 
 	// TODO: Fix memory requirements, probably with error handling...
