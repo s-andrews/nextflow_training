@@ -1,0 +1,4 @@
+name	WBcel235
+species	M_musculus
+fasta	/opt/nextflow_training/genomes/GRCm38/
+bismark	/opt/nextflow_training/genomes/GRCm38/
