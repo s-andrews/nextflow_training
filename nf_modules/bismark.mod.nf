@@ -17,7 +17,7 @@ process BISMARK {
 	//label 'hugeMem'
 
 	cpus { 2 }
-	memory { 20.GB * task.attempt }  
+	memory { 3.GB * task.attempt }  
 	errorStrategy { sleep(Math.pow(2, task.attempt) * 30 as long); return 'retry' }
 	maxRetries 3
 	
