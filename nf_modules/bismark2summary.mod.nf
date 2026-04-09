@@ -2,7 +2,7 @@ params.prefix = ""
 
 process BISMARK2SUMMARY {
 
-	publishDir "$outputdir",
+	publishDir "${params.outdir}",
 		mode: "link", overwrite: true
 
 
