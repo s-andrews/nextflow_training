@@ -22,34 +22,11 @@ params.multiqc_args = ''
 
 
 params.help = false
-// Show help message and exit
-if (params.help){
-    helpMessage()
-    exit 0
-}
-
 params.list_genomes = false;
-if (params.list_genomes){
-    println ("[WORKLFOW] List genomes selected")
-}
-
-if (params.verbose){
-    println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
-    println ("[WORKFLOW] TRIM GALORE ARGS: "      + params.trim_galore_args)
-    println ("[WORKFLOW] BISMARK ARGS ARE: "      + params.bismark_args)
-    println ("[WORKFLOW] BISMARK DEDUPLICATION ARGS ARE: "         + params.deduplicate_bismark_args)
-    println ("[WORKFLOW] BISMARK METHYLATION EXTRACTOR ARGS ARE: " + params.bismark_methylation_extractor_args)
-}
 
 include { makeFilesChannel; getFileBaseNames } from './nf_modules/files.mod.nf'
 include { getGenome }                             from './nf_modules/genomes.mod.nf'
 include { listGenomes }                           from './nf_modules/genomes.mod.nf'
-
-if (params.list_genomes){
-    listGenomes()  // this lists all available genomes, and exits
-}
-
-genome = getGenome(params.genome)
 
 include { FASTQC }                               from './nf_modules/fastqc.mod.nf'                         
 include { FASTQC as FASTQC2 }                    from './nf_modules/fastqc.mod.nf' 
@@ -69,11 +46,30 @@ include { BISMARK2SUMMARY }                      from './nf_modules/bismark2summ
 
 include { MULTIQC }                              from './nf_modules/multiqc.mod.nf' 
 
-file_ch = makeFilesChannel(args)
-
 workflow {
 
     main:
+        if (params.help){
+            helpMessage()
+            exit 0
+        }
+
+        if (params.list_genomes){
+            println ("[WORKLFOW] List genomes selected")
+            listGenomes()  // this lists all available genomes, and exits
+        }
+
+        if (params.verbose){
+            println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
+            println ("[WORKFLOW] TRIM GALORE ARGS: "      + params.trim_galore_args)
+            println ("[WORKFLOW] BISMARK ARGS ARE: "      + params.bismark_args)
+            println ("[WORKFLOW] BISMARK DEDUPLICATION ARGS ARE: "         + params.deduplicate_bismark_args)
+            println ("[WORKFLOW] BISMARK METHYLATION EXTRACTOR ARGS ARE: " + params.bismark_methylation_extractor_args)
+        }
+
+        file_ch = makeFilesChannel(args)
+        def genome = getGenome(params.genome)
+
         FASTQC                          (file_ch, params.outdir, params.fastqc_args, params.verbose)
         TRIM_GALORE                     (file_ch, params.outdir, params.trim_galore_args, params.verbose)
         FASTQC2                         (TRIM_GALORE.out.reads, params.outdir, params.fastqc_args, params.verbose)
