@@ -11,6 +11,10 @@ process BISMARK_METHYLATION_EXTRACTOR {
 	
 	tag "$bam" // Adds name to job submission instead of (1), (2) etc.
 
+	publishDir "$outputdir",
+		mode: "link", overwrite: true
+    
+
     input:
 	    tuple val (name), path(bam)
 		val (outputdir)
@@ -24,9 +28,6 @@ process BISMARK_METHYLATION_EXTRACTOR {
 		path "*M-bias.txt",                     emit: mbias
 		path "*cov.gz",                         emit: coverage
 	
-	publishDir "$outputdir",
-		mode: "link", overwrite: true
-    
 	script:
 		
 		if (verbose){
