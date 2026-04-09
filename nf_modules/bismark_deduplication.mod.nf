@@ -4,7 +4,10 @@ process BISMARK_DEDUPLICATION {
 	tag "$bam" // Adds name to job submission instead of (1), (2) etc.
 
 	label 'bigMem'
-	
+
+	publishDir "$outputdir",
+		mode: "link", overwrite: true
+
     input:
 	    tuple val(name), path(bam)
 		val (outputdir)
@@ -14,9 +17,6 @@ process BISMARK_DEDUPLICATION {
 	output:
 		path "*report.txt", emit: report
 		tuple val(name), path ("*bam"),        emit: bam
-
-	publishDir "$outputdir",
-		mode: "link", overwrite: true
 
     script:
 		if (verbose){
