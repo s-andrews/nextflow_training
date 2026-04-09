@@ -93,7 +93,7 @@ workflow {
 
         BISMARK2REPORT                   (bismark_report_ch, params.outdir, params.bismark2report_args, params.verbose)
         BISMARK2SUMMARY                  (bismark_report_ch, params.outdir, params.bismark2summary_args, params.verbose)
-        MULTIQC                          (multiqc_ch, params.outdir, params.multiqc_args, params.verbose)
+        MULTIQC                          (multiqc_ch)
 }
 
 def helpMessage() {
