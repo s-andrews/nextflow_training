@@ -5,7 +5,7 @@ process BISMARK_DEDUPLICATION {
 
 	label 'bigMem'
 
-	publishDir "$outputdir",
+	publishDir "${params.outdir}",
 		mode: "link", overwrite: true
 
     input:
