@@ -12,7 +12,6 @@ params.verbose = false
 params.single_end = false  // default mode is auto-detect. NOTE: params are handed over automatically
 
 params.fastqc_args = ''
-params.fastq_screen_args = ''
 params.trim_galore_args = ''
 params.bismark_args = ''
 params.deduplicate_bismark_args = ''
@@ -36,7 +35,6 @@ if (params.list_genomes){
 
 if (params.verbose){
     println ("[WORKFLOW] FASTQC ARGS: "           + params.fastqc_args)
-    println ("[WORKFLOW] FASTQ SCREEN ARGS ARE: " + params.fastq_screen_args)
     println ("[WORKFLOW] TRIM GALORE ARGS: "      + params.trim_galore_args)
     println ("[WORKFLOW] BISMARK ARGS ARE: "      + params.bismark_args)
     println ("[WORKFLOW] BISMARK DEDUPLICATION ARGS ARE: "         + params.deduplicate_bismark_args)
@@ -56,17 +54,16 @@ genome = getGenome(params.genome)
 include { FASTQC }                               from './nf_modules/fastqc.mod.nf'                         
 include { FASTQC as FASTQC2 }                    from './nf_modules/fastqc.mod.nf' 
 
-include { FASTQ_SCREEN }                         from './nf_modules/fastq_screen.mod.nf' params(bisulfite: '--bisulfite')
 
 // Adding pbat flag for PBAT processing. For Trim Galore we pass on the number of bp that need to be clipped at the 5' end
-include { TRIM_GALORE }                          from './nf_modules/trim_galore.mod.nf' params(pbat: params.pbat)
+include { TRIM_GALORE }                          from './nf_modules/trim_galore.mod.nf'
 // Adding pbat flag for PBAT processing
-include { BISMARK }                              from './nf_modules/bismark.mod.nf' params(genome: genome, pbat: true)
+include { BISMARK }                              from './nf_modules/bismark.mod.nf'
 
 include { BISMARK_DEDUPLICATION }                from './nf_modules/bismark_deduplication.mod.nf'
 
 // Adding pbat flag for PBAT processing
-include { BISMARK_METHYLATION_EXTRACTOR }        from './nf_modules/bismark_methylation_extractor.mod.nf' params(pbat: true)
+include { BISMARK_METHYLATION_EXTRACTOR }        from './nf_modules/bismark_methylation_extractor.mod.nf'
 include { BISMARK2REPORT }                       from './nf_modules/bismark2report.mod.nf'
 include { BISMARK2SUMMARY }                      from './nf_modules/bismark2summary.mod.nf'
 
@@ -79,16 +76,14 @@ workflow {
     main:
         FASTQC                          (file_ch, params.outdir, params.fastqc_args, params.verbose)
         TRIM_GALORE                     (file_ch, params.outdir, params.trim_galore_args, params.verbose)
-        FASTQ_SCREEN                    (TRIM_GALORE.out.reads, params.outdir, params.fastq_screen_args, params.verbose)
         FASTQC2                         (TRIM_GALORE.out.reads, params.outdir, params.fastqc_args, params.verbose)
-        BISMARK                         (TRIM_GALORE.out.reads, params.outdir, params.bismark_args, params.verbose)
+        BISMARK                         (TRIM_GALORE.out.reads, genome, params.outdir, params.bismark_args, params.verbose)
         BISMARK_DEDUPLICATION           (BISMARK.out.bam, params.outdir, params.deduplicate_bismark_args, params.verbose)
         BISMARK_METHYLATION_EXTRACTOR   (BISMARK_DEDUPLICATION.out.bam, params.outdir, params.bismark_methylation_extractor_args, params.verbose)
 
         // merging channels for MultiQC
         multiqc_ch = FASTQC.out.report.mix(
             TRIM_GALORE.out.report,
-            FASTQ_SCREEN.out.report.ifEmpty([]),
             FASTQC2.out.report.ifEmpty([]),
             BISMARK.out.report.ifEmpty([]),
             BISMARK_DEDUPLICATION.out.report.ifEmpty([]),
@@ -146,7 +141,6 @@ def helpMessage() {
     --- FastQC
     --- Trim Galore 
         |
-        --- FastQ Screen
         --- FastQC
         --- Bismark 
             |
@@ -164,7 +158,6 @@ def helpMessage() {
     By default, the involved tools are run in the following way:
     ------------------------------------------------------------
     FastQC:                           defaults ('-q')
-    FastQ Screen:                     '--bisulfite'
     Trim Galore:                      adapter auto-detection; '--clip_r1 9 (--clip_r2 9)'
     Bismark:                          '--pbat'
     Bismark deduplication:            defaults
@@ -186,8 +179,6 @@ def helpMessage() {
       <input files>                   List of input files, e.g. '*fastq.gz' or '*fq.gz'. Files are automatically processed as
                                       single-end (SE) or paired end (PE) files (if file pairs share the same base-name, and differ only
                                       by a read number, e.g. 'base_name_R1.fastq.gz' and 'base_name_R2.fastq.gz' (or R3, R4). For
-                                      PE files, only Read 1 is run through FastQ Screen (as typically R1 and R2 produce nearly identical
-                                      contamination profiles). To run PE files in single-end mode, please see '--single_end' below.
 
       --genome [str]                  Genome build ID to be used for the alignment, e.g. GRCh38 (latest human genome) or GRCm38
                                       (latest mouse genome build). To list all available genomes, see '--list_genomes' below.
@@ -204,11 +195,6 @@ def helpMessage() {
                                       reads are >50bp and use a specific file with non-default adapter sequences, use: 
                                       ' --fastqc_args="--nogroup --adapters ./non_default_adapter_file.txt" '. [Default: None]
 
-      --fastq_screen_args="[str]"     This option can take any number of options that are compatible with FastQ Screen to modify its
-                                      default behaviour. For more detailed information on available options please refer to the FastQ Screen
-                                      documentation, or run 'fastq_screen --help' on the command line. For instance, to process a bisulfite
-                                      converted library with fairly relaxed parameters, you could use: 
-                                      ' --fastq_screen_args="--bisulfite --score_min L,0,-0.6" '. [Default: None]
 
       --trim_galore_args="[str]"      This option can take any number of options that are compatible with Trim Galore to modify its
                                       default trimming behaviour. For more detailed information on available options please refer

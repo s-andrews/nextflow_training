@@ -22,8 +22,9 @@ process BISMARK {
 	// label 'multiCore'
 	// label 'quadCore'
 		
-    input:
+	input:
 	    tuple val(name), path(reads)
+		val (genome)
 		val (outputdir)
 		val (bismark_args)
 		val (verbose)
@@ -75,7 +76,7 @@ process BISMARK {
 			readString = reads
 		}
 
-		index = "--genome " + params.genome["bismark"]
+		index = "--genome " + genome["bismark"]
 
 		unmapped_name = ''	
 			// add Genome build and aligner to output name
@@ -89,18 +90,18 @@ process BISMARK {
 			}
 
 			if (bismark_args =~ /-hisat/){ // if HISAT2 was given on the command line
-				bismark_name = unmapped_name + "_" + params.genome["name"] + "_bismark_hisat2"
+				bismark_name = unmapped_name + "_" + genome["name"] + "_bismark_hisat2"
 			}
 			else{ // default is Bowtie 2
-				bismark_name = unmapped_name + "_" + params.genome["name"] + "_bismark_bt2"
+				bismark_name = unmapped_name + "_" + genome["name"] + "_bismark_bt2"
 			}
 		}
 		else{
 			if (bismark_args =~ /-hisat/){ // if HISAT2 was given on the command line
-				bismark_name = name + "_" + params.genome["name"] + "_bismark_hisat2"
+				bismark_name = name + "_" + genome["name"] + "_bismark_hisat2"
 			}
 			else{ // default is Bowtie 2
-				bismark_name = name + "_" + params.genome["name"] + "_bismark_bt2"
+				bismark_name = name + "_" + genome["name"] + "_bismark_bt2"
 			}
 		}	
 		// println ("Output basename: $bismark_name")
